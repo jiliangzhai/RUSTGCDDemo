@@ -1,28 +1,27 @@
 //
-//  ViewController.m
+//  ViewController4.m
 //  GCDDemo
 //
-//  Created by rust_33 on 15/12/4.
+//  Created by rust_33 on 15/12/5.
 //  Copyright (c) 2015年 rust_33. All rights reserved.
 //
 
-#import "ViewController.h"
-#define topSpace 40
+#import "ViewController4.h"
 #define space 10
+#define topSpace 60
 #define column 3
 #define row 4
 
-@interface ViewController ()
-{
-    NSMutableArray *imageViews;
+@interface ViewController4 (){
+    
     NSMutableArray *imageURL;
+    NSMutableArray *imageViews;
     UIScrollView *scrollView;
 }
-- (void)loadImage;
 
 @end
 
-@implementation ViewController
+@implementation ViewController4
 
 - (void)loadView
 {
@@ -61,24 +60,27 @@
             CGRect imageFrame = CGRectMake(space+j*(space+imageWidth),topSpace+i*(space+imageHeight), imageWidth, imageHeight);
             
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+            imageView.layer.borderColor = [UIColor redColor].CGColor;
+            imageView.layer.borderWidth = 2.0;
             [scrollView addSubview:imageView];
             [imageViews addObject:imageView];
         }
     }
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button addTarget:self action:@selector(loadImage) forControlEvents:UIControlEventTouchUpInside];
-    button.frame = CGRectMake(frame.size.width/2-30, 10, 60, 30);
-    [button setTitle:@"加载图片" forState:UIControlStateNormal];
-    [scrollView addSubview:button];
+    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
+    [button1 addTarget:self action:@selector(loadImage) forControlEvents:UIControlEventTouchUpInside];
+    button1.frame = CGRectMake(frame.size.width/2-30, 10, 60, 30);
+    [button1 setTitle:@"加载图片" forState:UIControlStateNormal];
+    [scrollView addSubview:button1];
     
     scrollView.contentSize = CGSizeMake(frame.size.width,topSpace+row*(space+imageHeight)+imageHeight);
     scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:scrollView];
 }
-- (void)loadImage{
-    
+
+- (void)loadImage
+{
     for (int i=0; i<row*column; i++) {
         
         NSString *urlStr = [NSString stringWithFormat:@"http://7xpi4l.com1.z0.glb.clouddn.com/menghuan%i.jpg",i+1];
@@ -87,31 +89,33 @@
         [imageURL addObject:urlStr];
     }
     
-    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    for (int i=0;i<row*column;i++) {
+    dispatch_group_t group = dispatch_group_create();
+    dispatch_queue_t globalQueue = dispatch_get_global_queue(0, 0);
+    dispatch_group_async(group,globalQueue, ^{
         
-        dispatch_async(globalQueue, ^{
-            
+        for (int i=0; i<6; i++) {
             [self loadImageAtIndex:i];
-            
-        });
+        }
         
-    }
+    });
     
+    dispatch_group_async(group,globalQueue, ^{
+        for (int i=3; i<9; i++) {
+            [self loadImageAtIndex:i];
+        }
+    });
+    
+    dispatch_group_notify(group,globalQueue, ^{
+        
+        for (int i=9; i<12; i++) {
+            [self loadImageAtIndex:i];
+        }
+    });
 }
 
 - (void)loadImageAtIndex:(NSInteger)index
 {
-    NSString *str = [imageURL objectAtIndex:index];
-    
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:str]];
-    UIImage *image = [UIImage imageWithData:data];
-    
-    [self updateImage:image atIndex:index];
-}
-
-- (void)updateImage:(UIImage *)image atIndex:(NSInteger)index
-{
+    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[imageURL objectAtIndex:index]]]];
     UIImageView *imageView = [imageViews objectAtIndex:index];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -119,8 +123,15 @@
         imageView.image = image;
         
     });
+    
 }
 @end
+
+
+
+
+
+
 
 
 

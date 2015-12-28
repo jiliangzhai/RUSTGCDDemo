@@ -1,28 +1,28 @@
 //
-//  ViewController.m
+//  ViewController1.m
 //  GCDDemo
 //
 //  Created by rust_33 on 15/12/4.
 //  Copyright (c) 2015年 rust_33. All rights reserved.
 //
 
-#import "ViewController.h"
-#define topSpace 40
+#import "ViewController1.h"
 #define space 10
+#define topSpace 60
 #define column 3
 #define row 4
 
-@interface ViewController ()
+@interface ViewController1 ()
 {
-    NSMutableArray *imageViews;
     NSMutableArray *imageURL;
+    NSMutableArray *imageViews;
     UIScrollView *scrollView;
 }
 - (void)loadImage;
 
 @end
 
-@implementation ViewController
+@implementation ViewController1
 
 - (void)loadView
 {
@@ -33,8 +33,8 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
     
+    [super viewDidLoad];
     [self layoutUI];
 }
 
@@ -77,7 +77,8 @@
     scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:scrollView];
 }
-- (void)loadImage{
+
+- (void)loadImage {
     
     for (int i=0; i<row*column; i++) {
         
@@ -87,40 +88,50 @@
         [imageURL addObject:urlStr];
     }
     
-    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    for (int i=0;i<row*column;i++) {
+    dispatch_queue_t globalQueue = dispatch_queue_create("rustblogs", DISPATCH_QUEUE_CONCURRENT);
+    dispatch_barrier_async(globalQueue, ^{
+        
+        [self loadImageAtIndex:11];
+    });
+    
+    for (int i=0;i<row*column-1;i++) {
         
         dispatch_async(globalQueue, ^{
-            
+               
             [self loadImageAtIndex:i];
-            
+               
         });
-        
     }
     
 }
 
 - (void)loadImageAtIndex:(NSInteger)index
 {
-    NSString *str = [imageURL objectAtIndex:index];
-    
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:str]];
-    UIImage *image = [UIImage imageWithData:data];
-    
-    [self updateImage:image atIndex:index];
-}
-
-- (void)updateImage:(UIImage *)image atIndex:(NSInteger)index
-{
-    UIImageView *imageView = [imageViews objectAtIndex:index];
-    
+    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[imageURL objectAtIndex:index]]]];
+    NSLog(@"%li",index);
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        UIImageView *imageView = [imageViews objectAtIndex:index];
         imageView.image = image;
         
     });
 }
 @end
+
+/*另外的方法包括
+ diapatch_group_t + diapatch_group() + diapatch_group_notify()
+用以实现任务分组，以及分组任务完成后得到通知再执行其他任务的方法。
+ 
+ dispatch_time_t + dispatch_time() + dispatch_after()
+ 用以实现任务的延时执行
+ 
+*/
+
+
+
+
+
+
 
 
 

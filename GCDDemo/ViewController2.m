@@ -1,28 +1,29 @@
 //
-//  ViewController.m
+//  ViewController2.m
 //  GCDDemo
 //
-//  Created by rust_33 on 15/12/4.
+//  Created by rust_33 on 15/12/5.
 //  Copyright (c) 2015年 rust_33. All rights reserved.
 //
 
-#import "ViewController.h"
-#define topSpace 40
+#import "ViewController2.h"
 #define space 10
+#define topSpace 60
 #define column 3
-#define row 4
+#define row 3
 
-@interface ViewController ()
-{
-    NSMutableArray *imageViews;
+@interface ViewController2 (){
+    
     NSMutableArray *imageURL;
+    NSMutableArray *imageViews;
     UIScrollView *scrollView;
+    NSLock *lock;
+    NSInteger count;
 }
-- (void)loadImage;
 
 @end
 
-@implementation ViewController
+@implementation ViewController2
 
 - (void)loadView
 {
@@ -40,7 +41,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    
 }
 
 - (void)layoutUI
@@ -49,6 +49,7 @@
     imageURL = [NSMutableArray array];
     scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     scrollView.scrollEnabled = YES;
+    lock = [[NSLock alloc] init];
     
     CGRect frame = self.view.frame;
     NSInteger width = frame.size.width;
@@ -61,6 +62,8 @@
             CGRect imageFrame = CGRectMake(space+j*(space+imageWidth),topSpace+i*(space+imageHeight), imageWidth, imageHeight);
             
             UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+            imageView.layer.borderColor = [UIColor redColor].CGColor;
+            imageView.layer.borderWidth = 2.0;
             [scrollView addSubview:imageView];
             [imageViews addObject:imageView];
         }
@@ -77,7 +80,10 @@
     scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:scrollView];
 }
-- (void)loadImage{
+
+- (void)loadImage
+{
+    count = -1;
     
     for (int i=0; i<row*column; i++) {
         
@@ -86,13 +92,12 @@
         
         [imageURL addObject:urlStr];
     }
-    
-    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    for (int i=0;i<row*column;i++) {
+    //创建15个线程争夺9张图片的加载
+    for (int i=0; i<15; i++) {
         
-        dispatch_async(globalQueue, ^{
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
             
-            [self loadImageAtIndex:i];
+            [self getTheData];
             
         });
         
@@ -100,18 +105,23 @@
     
 }
 
-- (void)loadImageAtIndex:(NSInteger)index
+- (void)getTheData
 {
-    NSString *str = [imageURL objectAtIndex:index];
+    [lock lock];
     
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:str]];
-    UIImage *image = [UIImage imageWithData:data];
+        count++;
     
-    [self updateImage:image atIndex:index];
+    [lock unlock];
+    
+    //前9个线程会进行加载任务
+    if (count<9) {
+         [self updateTheImageViewAtIndex:count];
+    }
 }
 
-- (void)updateImage:(UIImage *)image atIndex:(NSInteger)index
+- (void)updateTheImageViewAtIndex:(NSInteger)index
 {
+    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL[index]]]];
     UIImageView *imageView = [imageViews objectAtIndex:index];
     
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -119,8 +129,36 @@
         imageView.image = image;
         
     });
+    
 }
+
+/*@synchronize代码块和NSLock的用法类似需要改动的部分如下：
+
+NSString *string;
+@synchronize(self){
+if (imageURL.count>0) {
+    string = [imageURL lastObject];
+    [imageURL removeLastObject];
+    count++;
+}else
+return;
+ }
+*/
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

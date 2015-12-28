@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "NARootViewController.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +17,18 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    
+    UIStoryboard *story = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    NARootViewController *rootViewController =[story instantiateViewControllerWithIdentifier:@"NARootViewController"];
+    UINavigationController *nv = [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    nv.navigationBarHidden = NO;
+    _window.rootViewController = nv;
+    
+    [_window makeKeyAndVisible];
+    _window.backgroundColor = [UIColor clearColor];
+    
     return YES;
 }
 

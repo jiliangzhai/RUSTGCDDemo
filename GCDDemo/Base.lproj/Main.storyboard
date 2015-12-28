@@ -1,25 +1,117 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C2513" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="P0n-kX-Fzr">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="ufC-wZ-h7g">
+        <!--Root View Controller-->
+        <scene sceneID="LMZ-Gi-vvh">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NARootViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="P0n-kX-Fzr" customClass="NARootViewController" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
-                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                        <viewControllerLayoutGuide type="top" id="H6C-SP-abF"/>
+                        <viewControllerLayoutGuide type="bottom" id="FO4-CE-52Q"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    <view key="view" contentMode="scaleToFill" id="ZT6-7f-8W7">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vs4-RK-zP4">
+                                <rect key="frame" x="100" y="82" width="120" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="iWl-gC-XtY"/>
+                                    <constraint firstAttribute="height" constant="30" id="pwW-Yi-SXU"/>
+                                </constraints>
+                                <state key="normal" title="并行方式加载图片">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loadImage:" destination="P0n-kX-Fzr" eventType="touchUpInside" id="CSM-9H-Mhz"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6k-57-TU9">
+                                <rect key="frame" x="70" y="132" width="180" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="180" id="4Jh-FH-mRH"/>
+                                    <constraint firstAttribute="height" constant="30" id="Fv1-Zf-2vZ"/>
+                                </constraints>
+                                <state key="normal" title="并行方式加载中的顺序控制">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loadImageWithOrderControl:" destination="P0n-kX-Fzr" eventType="touchUpInside" id="03g-QQ-PWh"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZBz-O6-lvY">
+                                <rect key="frame" x="108" y="182" width="105" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="CnS-h6-5vF"/>
+                                    <constraint firstAttribute="width" constant="105" id="mKW-w5-r4b"/>
+                                </constraints>
+                                <state key="normal" title="任务的分组管理">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loadImageWithGroup:" destination="P0n-kX-Fzr" eventType="touchUpInside" id="NOh-fJ-NGq"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qjo-4F-i3m">
+                                <rect key="frame" x="126" y="282" width="69" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="6vS-6N-Qn4"/>
+                                    <constraint firstAttribute="width" constant="69" id="NQU-cG-Lrs"/>
+                                </constraints>
+                                <state key="normal" title="线程同步2">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="taskSynchornization2:" destination="P0n-kX-Fzr" eventType="touchUpInside" id="CbA-VO-sud"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O20-91-jq2">
+                                <rect key="frame" x="126" y="232" width="69" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="69" id="tgO-YP-Dde"/>
+                                    <constraint firstAttribute="height" constant="30" id="xRn-fQ-Cbc"/>
+                                </constraints>
+                                <state key="normal" title="线程同步1">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="taskSynchronization1:" destination="P0n-kX-Fzr" eventType="touchUpInside" id="lD9-mQ-hDT"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5YB-sI-rDa">
+                                <rect key="frame" x="100" y="332" width="120" height="30"/>
+                                <state key="normal" title="串行方式加载图片">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loadImageInSerialQueue:" destination="P0n-kX-Fzr" eventType="touchUpInside" id="5PF-vg-Qr0"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="Vs4-RK-zP4" secondAttribute="centerX" id="3Uv-zk-zHS"/>
+                            <constraint firstAttribute="centerX" secondItem="5YB-sI-rDa" secondAttribute="centerX" id="IFN-he-jhc"/>
+                            <constraint firstItem="Vs4-RK-zP4" firstAttribute="top" secondItem="H6C-SP-abF" secondAttribute="bottom" constant="62" id="IzD-hL-4aa"/>
+                            <constraint firstAttribute="centerX" secondItem="O20-91-jq2" secondAttribute="centerX" id="SyK-CX-GZ7"/>
+                            <constraint firstAttribute="centerX" secondItem="ZBz-O6-lvY" secondAttribute="centerX" id="aBI-zS-KxG"/>
+                            <constraint firstItem="O20-91-jq2" firstAttribute="top" secondItem="ZBz-O6-lvY" secondAttribute="bottom" constant="20" id="bQR-C9-t9d"/>
+                            <constraint firstItem="ZBz-O6-lvY" firstAttribute="top" secondItem="h6k-57-TU9" secondAttribute="bottom" constant="20" id="eKo-Dp-ZLF"/>
+                            <constraint firstAttribute="centerX" secondItem="qjo-4F-i3m" secondAttribute="centerX" id="jJk-qv-XRc"/>
+                            <constraint firstItem="qjo-4F-i3m" firstAttribute="top" secondItem="O20-91-jq2" secondAttribute="bottom" constant="20" id="mEi-Dm-uB1"/>
+                            <constraint firstItem="h6k-57-TU9" firstAttribute="top" secondItem="Vs4-RK-zP4" secondAttribute="bottom" constant="20" id="mrV-D2-VcG"/>
+                            <constraint firstAttribute="centerX" secondItem="h6k-57-TU9" secondAttribute="centerX" id="onz-Oo-JNN"/>
+                            <constraint firstItem="5YB-sI-rDa" firstAttribute="top" secondItem="qjo-4F-i3m" secondAttribute="bottom" constant="20" id="xGv-f0-uqI"/>
+                        </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ymJ-0h-Bkz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="502" y="391"/>
         </scene>
     </scenes>
 </document>

@@ -1,36 +1,27 @@
 //
-//  ViewController.m
+//  ViewController5.m
 //  GCDDemo
 //
-//  Created by rust_33 on 15/12/4.
+//  Created by rust_33 on 15/12/28.
 //  Copyright (c) 2015年 rust_33. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "ViewController5.h"
 #define topSpace 40
 #define space 10
 #define column 3
 #define row 4
 
-@interface ViewController ()
+@interface ViewController5 ()
 {
     NSMutableArray *imageViews;
     NSMutableArray *imageURL;
     UIScrollView *scrollView;
 }
 - (void)loadImage;
-
 @end
 
-@implementation ViewController
-
-- (void)loadView
-{
-    UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-    view.backgroundColor = [UIColor whiteColor];
-    
-    self.view = view;
-}
+@implementation ViewController5
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -38,9 +29,12 @@
     [self layoutUI];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
+- (void)loadView
+{
+    UIView *view = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
+    view.backgroundColor = [UIColor whiteColor];
     
+    self.view = view;
 }
 
 - (void)layoutUI
@@ -87,14 +81,21 @@
         [imageURL addObject:urlStr];
     }
     
-    dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_queue_t serialQueue = dispatch_queue_create("rust_33SerialQueue", DISPATCH_QUEUE_SERIAL);
+    
     for (int i=0;i<row*column;i++) {
         
-        dispatch_async(globalQueue, ^{
+        /* dispatch_sync(serialQueue, ^{
             
             [self loadImageAtIndex:i];
             
-        });
+        }); */
+        
+        dispatch_async(serialQueue, ^{
+            
+            [self loadImageAtIndex:i];
+            
+        }); 
         
     }
     
@@ -108,6 +109,7 @@
     UIImage *image = [UIImage imageWithData:data];
     
     [self updateImage:image atIndex:index];
+    
 }
 
 - (void)updateImage:(UIImage *)image atIndex:(NSInteger)index
@@ -120,10 +122,12 @@
         
     });
 }
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    
+}
+
+
+
 @end
-
-
-
-
-
-

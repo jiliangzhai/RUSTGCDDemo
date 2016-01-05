@@ -108,7 +108,6 @@
 - (void)loadImageAtIndex:(NSInteger)index
 {
     UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[imageURL objectAtIndex:index]]]];
-    NSLog(@"%li",index);
     dispatch_async(dispatch_get_main_queue(), ^{
         
         UIImageView *imageView = [imageViews objectAtIndex:index];
